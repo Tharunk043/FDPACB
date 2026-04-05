@@ -1,0 +1,34 @@
+{
+  "Total" : {
+    "transaction" : "Total",
+    "sampleCount" : 20770,
+    "errorCount" : 20770,
+    "errorPct" : 100.0,
+    "meanResTime" : 60.3589311506979,
+    "medianResTime" : 54.0,
+    "minResTime" : 47.0,
+    "maxResTime" : 1193.0,
+    "pct1ResTime" : 71.0,
+    "pct2ResTime" : 88.0,
+    "pct3ResTime" : 143.0,
+    "throughput" : 700.2697235333783,
+    "receivedKBytesPerSec" : 343.98014739969653,
+    "sentKBytesPerSec" : 222.9374315155091
+  },
+  "POST /api/v1/ivr/landing" : {
+    "transaction" : "POST /api/v1/ivr/landing",
+    "sampleCount" : 20770,
+    "errorCount" : 20770,
+    "errorPct" : 100.0,
+    "meanResTime" : 60.3589311506979,
+    "medianResTime" : 54.0,
+    "minResTime" : 47.0,
+    "maxResTime" : 1193.0,
+    "pct1ResTime" : 71.0,
+    "pct2ResTime" : 88.0,
+    "pct3ResTime" : 143.0,
+    "throughput" : 700.2697235333783,
+    "receivedKBytesPerSec" : 343.98014739969653,
+    "sentKBytesPerSec" : 222.9374315155091
+  }
+}

@@ -42,16 +42,17 @@ public class FinancialRecordController {
     @GetMapping
     @PreAuthorize("hasAnyRole('VIEWER', 'ANALYST', 'ADMIN')")
     @Operation(summary = "List records with optional filters [ALL ROLES]",
-               description = "Filter by type, category, date range. Supports pagination.")
+               description = "Filter by type, category, date range, and free-text search on notes. Supports pagination.")
     public ResponseEntity<Page<RecordResponse>> getAll(
             @RequestParam(required = false) RecordType type,
             @RequestParam(required = false) Category category,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
+            @RequestParam(required = false) String search,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        return ResponseEntity.ok(recordService.getRecords(type, category, from, to, page, size));
+        return ResponseEntity.ok(recordService.getRecords(type, category, from, to, search, page, size));
     }
 
     @GetMapping("/{id}")

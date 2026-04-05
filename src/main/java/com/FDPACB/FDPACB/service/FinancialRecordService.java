@@ -51,10 +51,11 @@ public class FinancialRecordService {
                                             Category category,
                                             LocalDate from,
                                             LocalDate to,
+                                            String search,
                                             int page,
                                             int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return recordRepository.findFiltered(type, category, from, to, pageable)
+        return recordRepository.findFiltered(type, category, from, to, search, pageable)
                 .map(RecordResponse::from);
     }
 

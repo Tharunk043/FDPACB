@@ -26,6 +26,7 @@ public interface FinancialRecordRepository extends JpaRepository<FinancialRecord
               AND (:category IS NULL OR r.category = :category)
               AND (:from IS NULL OR r.date >= :from)
               AND (:to IS NULL OR r.date <= :to)
+              AND (:search IS NULL OR LOWER(r.notes) LIKE LOWER(CONCAT('%', :search, '%')))
             ORDER BY r.date DESC, r.createdAt DESC
             """)
     Page<FinancialRecord> findFiltered(
@@ -33,6 +34,7 @@ public interface FinancialRecordRepository extends JpaRepository<FinancialRecord
             @Param("category") Category category,
             @Param("from") LocalDate from,
             @Param("to") LocalDate to,
+            @Param("search") String search,
             Pageable pageable
     );
 
