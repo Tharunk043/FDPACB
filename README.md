@@ -10,6 +10,7 @@ A production-quality **Spring Boot 3.4** REST API backend for a Finance Dashboar
 |---|---|
 | Framework | Spring Boot 3.4 / Spring Web MVC |
 | Security | Spring Security 6 + JWT (JJWT 0.12) |
+| Rate Limiting | Bucket4j Token Bucket |
 | Database | H2 (file-based, zero external setup) |
 | ORM | Spring Data JPA + Hibernate |
 | Validation | Jakarta Bean Validation |
@@ -118,6 +119,7 @@ Authorization: Bearer <token>
 | `category` | See Category enum | `?category=SALARY` |
 | `from` | `yyyy-MM-dd` | `?from=2025-01-01` |
 | `to` | `yyyy-MM-dd` | `?to=2025-12-31` |
+| `search` | string | `?search=salary` |
 | `page` | integer (0-based) | `?page=0` |
 | `size` | integer | `?size=10` |
 
@@ -216,6 +218,7 @@ All errors return a consistent JSON structure:
 | `403` | Authenticated but insufficient role |
 | `404` | Resource not found |
 | `409` | Conflict (e.g., duplicate username/email) |
+| `429` | Too Many Requests (Rate limit exceeded) |
 | `500` | Unexpected server error |
 
 ---
@@ -234,7 +237,7 @@ Tests use an in-memory H2 database (`@ActiveProfiles("test")`) and are isolated 
 
 ```
 src/main/java/com/FDPACB/FDPACB/
-├── config/          # SecurityConfig, JpaConfig, OpenApiConfig, DataSeeder
+├── config/          # SecurityConfig, JpaConfig, OpenApiConfig, RateLimitingInterceptor, WebMvcConfig, DataSeeder
 ├── controller/      # AuthController, UserController, FinancialRecordController, DashboardController
 ├── dto/             # auth/, user/, record/, dashboard/ DTOs
 ├── entity/          # User, FinancialRecord
@@ -257,8 +260,10 @@ src/main/java/com/FDPACB/FDPACB/
 
 4. **Stateless JWT auth** — no sessions or server-side token storage. Token expiry is 24 hours. For production, consider refresh tokens and a token revocation blacklist.
 
-5. **BCrypt password hashing** — all passwords stored as BCrypt hashes (strength 10).
+5. **Rate Limiting** — Every client is limited to 50 API requests per minute using the Bucket4j token-bucket algorithm, protecting the API from abuse.
 
-6. **Pagination** — defaults to `page=0, size=10` for all list endpoints.
+6. **BCrypt password hashing** — all passwords stored as BCrypt hashes (strength 10).
 
-7. **Spring Boot 3.4** (not 4.0) — Spring Boot 4.0 is not yet released as a stable GA version. Spring Boot 3.4 with Spring Security 6 and Jakarta EE 10 is the current production-ready LTS version.
+7. **Pagination & Searching** — defaults to `page=0, size=10` for all list endpoints. Native SQL queries efficiently support combining pagination with multiple AND filters including a free-text `search` parameter.
+
+8. **Spring Boot 3.4** (not 4.0) — Spring Boot 4.0 is not yet released as a stable GA version. Spring Boot 3.4 with Spring Security 6 and Jakarta EE 10 is the current production-ready LTS version.
